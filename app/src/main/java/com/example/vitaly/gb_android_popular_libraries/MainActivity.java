@@ -8,11 +8,11 @@ import android.widget.TextView;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.example.vitaly.gb_android_popular_libraries.EventBus.Event;
+import com.example.vitaly.gb_android_popular_libraries.EventBus.EventBus;
+import com.example.vitaly.gb_android_popular_libraries.EventBus.EventBusImpl;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -21,7 +21,6 @@ import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.subjects.PublishSubject;
 import timber.log.Timber;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView {
@@ -83,19 +82,15 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         Observable<String> sourceFirst = Observable.just("data1", "data11", "data111");
         Observable<String> sourceSecond = Observable.just("data2", "data22", "data222");
 
-        Observable<List<String>> zipSource = Observable.zip(sourceFirst,
-                sourceSecond,
-                (s, s2) -> Arrays.asList(s, s2));
-
-        Observer<List<String>> observerFirst = new Observer<List<String>>() {
+        Observer<String> observerFirst = new Observer<String>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(List<String> s) {
-                Timber.d("observerFirst: " + s);
+            public void onNext(String s) {
+                Timber.d("observerFirst: %s", s);
             }
 
             @Override
@@ -109,15 +104,15 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
             }
         };
 
-        Observer<List<String>> observerSecond = new Observer<List<String>>() {
+        Observer<String> observerSecond = new Observer<String>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(List<String> s) {
-                Timber.d("observerSecond: " + s);
+            public void onNext(String s) {
+                Timber.d("observerSecond: %s", s);
             }
 
             @Override
@@ -131,13 +126,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
             }
         };
 
-        PublishSubject<List<String>> eventBus = PublishSubject.create();
-
-        eventBus.subscribe(observerFirst);
-        eventBus.subscribe(observerSecond);
-
-        eventBus.onNext(Collections.singletonList("onEventBus!"));
-
-        zipSource.subscribe(eventBus);
+        EventBus<String> eventBus = new EventBusImpl<>(sourceFirst, sourceSecond);
+        eventBus.publish(new Event("Event on EventBus"));
+        eventBus.register(observerFirst);
+        eventBus.register(observerSecond);
     }
 }
