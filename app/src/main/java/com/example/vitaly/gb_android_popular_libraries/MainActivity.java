@@ -10,7 +10,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.vitaly.gb_android_popular_libraries.EventBus.Event;
 import com.example.vitaly.gb_android_popular_libraries.EventBus.EventBus;
-import com.example.vitaly.gb_android_popular_libraries.EventBus.EventBusImpl;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.Locale;
@@ -126,8 +125,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
             }
         };
 
-        EventBus<String> eventBus = new EventBusImpl<>(sourceFirst, sourceSecond);
-        eventBus.publish(new Event("Event on EventBus"));
+        EventBus<String> eventBus = new EventBus<>(sourceFirst, sourceSecond);
+        eventBus.publish(new Event<>("Event on EventBus"));
         eventBus.register(observerFirst);
         eventBus.register(observerSecond);
     }
