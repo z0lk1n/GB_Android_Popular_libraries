@@ -1,4 +1,4 @@
-package com.example.vitaly.gb_android_popular_libraries.EventBus;
+package com.example.vitaly.gb_android_popular_libraries.util;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -18,7 +18,7 @@ public class EventBus<T> {
         subject.subscribe(observer);
     }
 
-    public void publish(Event<T> event) {
-        subject.onNext(event.getPayload());
+    public void publish(Object o) {
+        subject.onNext((T) o);
     }
 }

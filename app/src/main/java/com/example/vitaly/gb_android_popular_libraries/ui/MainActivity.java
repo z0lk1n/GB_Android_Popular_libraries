@@ -1,4 +1,4 @@
-package com.example.vitaly.gb_android_popular_libraries;
+package com.example.vitaly.gb_android_popular_libraries.ui;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -8,8 +8,11 @@ import android.widget.TextView;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
-import com.example.vitaly.gb_android_popular_libraries.EventBus.Event;
-import com.example.vitaly.gb_android_popular_libraries.EventBus.EventBus;
+import com.example.vitaly.gb_android_popular_libraries.util.Event;
+import com.example.vitaly.gb_android_popular_libraries.util.EventBus;
+import com.example.vitaly.gb_android_popular_libraries.presenter.MainPresenter;
+import com.example.vitaly.gb_android_popular_libraries.R;
+import com.example.vitaly.gb_android_popular_libraries.util.SchedulersProviderImpl;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.Locale;
@@ -58,6 +61,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         presenter.counterClick(button.getId());
     }
 
+    private void initRxBinding() {
+        RxTextView.textChanges(editText).subscribe(charSequence -> presenter.textChanged(charSequence.toString()));
+    }
+
     @Override
     public void setButtonText(int id, Integer val) {
         switch (id) {
@@ -73,8 +80,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         }
     }
 
-    private void initRxBinding() {
-        RxTextView.textChanges(editText).subscribe(charSequence -> textView.setText(charSequence));
+    @Override
+    public void setTextInTextView(String s) {
+        textView.setText(s);
     }
 
     private void initEventBus() {
@@ -126,8 +134,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         };
 
         EventBus<String> eventBus = new EventBus<>(sourceFirst, sourceSecond);
-        eventBus.publish(new Event<>("Event on EventBus"));
         eventBus.register(observerFirst);
         eventBus.register(observerSecond);
+        eventBus.publish(new Event("Event on EventBus"));
     }
 }

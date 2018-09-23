@@ -1,4 +1,4 @@
-package com.example.vitaly.gb_android_popular_libraries;
+package com.example.vitaly.gb_android_popular_libraries.util;
 
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
