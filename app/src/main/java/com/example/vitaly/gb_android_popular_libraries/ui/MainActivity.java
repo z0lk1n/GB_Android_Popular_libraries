@@ -2,8 +2,6 @@ package com.example.vitaly.gb_android_popular_libraries.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,12 +19,13 @@ import com.example.vitaly.gb_android_popular_libraries.R;
 import com.example.vitaly.gb_android_popular_libraries.presenter.MainPresenter;
 import com.example.vitaly.gb_android_popular_libraries.util.Event;
 import com.example.vitaly.gb_android_popular_libraries.util.EventBus;
+import com.example.vitaly.gb_android_popular_libraries.util.FileConverterManager;
+import com.example.vitaly.gb_android_popular_libraries.util.FileConverterManagerImpl;
 import com.example.vitaly.gb_android_popular_libraries.util.SchedulersProviderImpl;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -40,6 +39,7 @@ import timber.log.Timber;
 public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     private static final int PICK_IMAGE = 1;
+    private FileConverterManager converter;
     private File storageDir;
 
     @BindView(R.id.btn_one)
@@ -64,7 +64,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @ProvidePresenter
     public MainPresenter provideMainPresenter() {
-        presenter = new MainPresenter(new SchedulersProviderImpl());
+        converter = new FileConverterManagerImpl(storageDir);
+        presenter = new MainPresenter(new SchedulersProviderImpl(), converter);
         return presenter;
     }
 
@@ -86,7 +87,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Override
     public void pickImage() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
+        intent.setType("image/jpeg");
         startActivityForResult(intent, PICK_IMAGE);
     }
 
@@ -95,39 +96,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
             try {
-                Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(data.getData()));
-                presenter.sendByteArray(convertToByteArray(bitmap));
+                InputStream stream = getContentResolver().openInputStream(data.getData());
+                presenter.sendByteArrayFromRequest(converter.getByteArrayFromStream(stream));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    private byte[] convertToByteArray(Bitmap bitmap) {
-        byte[] byteArray = null;
-        try {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byteArray = stream.toByteArray();
-            stream.close();
-            bitmap.recycle();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return byteArray;
-    }
-
-    @Override
-    public void createImageFile(String fileName, String suffix, byte[] byteArray) {
-        try {
-            File file = File.createTempFile(fileName, suffix, storageDir);
-            FileOutputStream out = new FileOutputStream(file);
-            out.write(byteArray);
-            out.flush();
-            out.close();
-            presenter.sendFilePath(file.getAbsolutePath());
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

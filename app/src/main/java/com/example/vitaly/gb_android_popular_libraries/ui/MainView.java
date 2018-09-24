@@ -13,8 +13,6 @@ public interface MainView extends MvpView {
 
     void pickImage();
 
-    void createImageFile(String fileName, String suffix, byte[] byteArray);
-
     void showProgressDialog();
 
     void setImageOnView(String path);

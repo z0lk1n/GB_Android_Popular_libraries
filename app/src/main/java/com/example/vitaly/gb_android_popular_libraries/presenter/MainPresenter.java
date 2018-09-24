@@ -7,11 +7,10 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.example.vitaly.gb_android_popular_libraries.R;
 import com.example.vitaly.gb_android_popular_libraries.model.CounterModel;
 import com.example.vitaly.gb_android_popular_libraries.ui.MainView;
+import com.example.vitaly.gb_android_popular_libraries.util.FileConverterManager;
 import com.example.vitaly.gb_android_popular_libraries.util.SchedulersProvider;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.io.IOException;
 
 import io.reactivex.Single;
 
@@ -24,9 +23,11 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     private CounterModel model;
     private SchedulersProvider schedulers;
+    private FileConverterManager converter;
 
-    public MainPresenter(SchedulersProvider schedulers) {
+    public MainPresenter(SchedulersProvider schedulers, FileConverterManager converter) {
         this.schedulers = schedulers;
+        this.converter = converter;
         this.model = new CounterModel();
     }
 
@@ -68,21 +69,26 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     @SuppressLint("CheckResult")
-    public void sendByteArray(byte[] byteArray) {
+    public void sendByteArrayFromRequest(byte[] byteArray) {
         Single.just(byteArray)
                 .subscribeOn(schedulers.io())
                 .observeOn(schedulers.computation())
                 .subscribe(this::createImageFileFromByteArray);
     }
 
-    private void createImageFileFromByteArray(byte[] byteArray) {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+    private void createImageFileFromByteArray(byte[] byteArr) {
         String suffix = ".png";
-        getViewState().createImageFile(timeStamp, suffix, byteArray);
+        try {
+            byte[] convertByteArr = converter.convertToPNG(byteArr);
+            String filePath = converter.createImageFile(suffix, convertByteArr);
+            showImage(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressLint("CheckResult")
-    public void sendFilePath(String path) {
+    private void showImage(String path) {
         Single.just(path)
                 .observeOn(schedulers.ui())
                 .subscribe(s -> getViewState().setImageOnView(s));
