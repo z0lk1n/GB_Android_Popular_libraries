@@ -10,4 +10,10 @@ public interface MainView extends MvpView {
     void setButtonText(int id, Integer calculate);
 
     void setTextInTextView(String s);
+
+    void pickImage();
+
+    void showProgressDialog();
+
+    void setImageOnView(String path);
 }
