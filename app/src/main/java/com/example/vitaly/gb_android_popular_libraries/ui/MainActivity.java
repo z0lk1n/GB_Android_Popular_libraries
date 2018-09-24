@@ -112,8 +112,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Override
     public void showProgressDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Convert image file")
-                .setNegativeButton("CANCEL", (dialog, which) -> dialog.dismiss());
+                .setTitle("Convert image file...")
+                .setNegativeButton("CANCEL", (dialog, which) -> {
+                    presenter.cancelConvertFile();
+                    dialog.dismiss();
+                });
         builder.show();
     }
 

@@ -12,7 +12,10 @@ import com.example.vitaly.gb_android_popular_libraries.util.SchedulersProvider;
 
 import java.io.IOException;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableSingleObserver;
 
 @InjectViewState
 public class MainPresenter extends MvpPresenter<MainView> {
@@ -24,6 +27,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
     private CounterModel model;
     private SchedulersProvider schedulers;
     private FileConverterManager converter;
+    private Disposable disposable;
 
     public MainPresenter(SchedulersProvider schedulers, FileConverterManager converter) {
         this.schedulers = schedulers;
@@ -70,10 +74,27 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     @SuppressLint("CheckResult")
     public void sendByteArrayFromRequest(byte[] byteArray) {
-        Single.just(byteArray)
+        Single<byte[]> single = Single.just(byteArray)
                 .subscribeOn(schedulers.io())
-                .observeOn(schedulers.computation())
-                .subscribe(this::createImageFileFromByteArray);
+                .observeOn(schedulers.computation());
+
+        disposable = single.subscribeWith(new DisposableSingleObserver<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                showProgressDialog();
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                createImageFileFromByteArray(byteArray);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        });
     }
 
     private void createImageFileFromByteArray(byte[] byteArr) {
@@ -92,5 +113,17 @@ public class MainPresenter extends MvpPresenter<MainView> {
         Single.just(path)
                 .observeOn(schedulers.ui())
                 .subscribe(s -> getViewState().setImageOnView(s));
+    }
+
+    @SuppressLint("CheckResult")
+    private void showProgressDialog() {
+        Completable.fromAction(() -> getViewState().showProgressDialog())
+                .subscribeOn(schedulers.ui());
+    }
+
+    public void cancelConvertFile() {
+        if (!disposable.isDisposed()) {
+            disposable.dispose();
+        }
     }
 }
