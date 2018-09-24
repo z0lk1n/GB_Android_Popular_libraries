@@ -114,7 +114,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Convert image file...")
                 .setNegativeButton("CANCEL", (dialog, which) -> {
-                    presenter.cancelConvertFile();
+                    presenter.cancelFileConversion();
                     dialog.dismiss();
                 });
         builder.show();

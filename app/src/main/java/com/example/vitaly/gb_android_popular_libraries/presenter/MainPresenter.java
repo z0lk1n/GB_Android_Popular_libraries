@@ -121,7 +121,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
                 .subscribeOn(schedulers.ui());
     }
 
-    public void cancelConvertFile() {
+    public void cancelFileConversion() {
         if (!disposable.isDisposed()) {
             disposable.dispose();
         }
