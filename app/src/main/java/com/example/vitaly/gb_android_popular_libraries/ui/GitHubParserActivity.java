@@ -1,9 +1,13 @@
 package com.example.vitaly.gb_android_popular_libraries.ui;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +21,7 @@ import com.example.vitaly.gb_android_popular_libraries.presenter.GitHubParserPre
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class GitHubParserActivity extends MvpAppCompatActivity implements GitHubParserView {
@@ -24,6 +29,7 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
     @BindView(R.id.tv_username) TextView usernameTextView;
     @BindView(R.id.iv_avatar) ImageView avatarImageView;
     @BindView(R.id.rv_list_repos) RecyclerView recyclerView;
+    @BindView(R.id.fab_github_parser) FloatingActionButton fab;
 
     private ReposAdapter adapter;
     private IImageLoader<ImageView> imageLoader;
@@ -63,5 +69,28 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
     @Override
     public void updateList() {
         adapter.refreshView();
+    }
+
+    @Override
+    public void showChooseUserDialog() {
+        final EditText input = new EditText(GitHubParserActivity.this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        AlertDialog.Builder builder = new AlertDialog.Builder(GitHubParserActivity.this)
+                .setView(input)
+                .setTitle("Input username")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    String username = input.getText().toString().trim();
+                    if (!username.isEmpty()) {
+                        presenter.setUsername(username);
+                        updateList();
+                    }
+                })
+                .setNegativeButton("CANCEL", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+
+    @OnClick(R.id.fab_github_parser)
+    public void onClickFab()    {
+        presenter.chooseUser();
     }
 }

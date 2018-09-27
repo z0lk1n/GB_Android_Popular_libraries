@@ -11,4 +11,6 @@ public interface GitHubParserView extends MvpView {
     void loadImage(String url);
 
     void updateList();
+
+    void showChooseUserDialog();
 }

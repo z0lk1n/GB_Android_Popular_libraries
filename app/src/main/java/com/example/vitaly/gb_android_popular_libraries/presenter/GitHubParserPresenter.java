@@ -18,7 +18,7 @@ import timber.log.Timber;
 
 @InjectViewState
 public class GitHubParserPresenter extends MvpPresenter<GitHubParserView> {
-    private final String username = "z0lk1n";
+    private String username = "z0lk1n";
 
     public class ReposListPresenter {
         private List<Repos> reposList;
@@ -73,5 +73,14 @@ public class GitHubParserPresenter extends MvpPresenter<GitHubParserView> {
                                 getViewState().updateList();
                             });
                 }, throwable -> Timber.e(throwable, "Failed to get user"));
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+        loadData();
+    }
+
+    public void chooseUser() {
+        getViewState().showChooseUserDialog();
     }
 }
