@@ -18,6 +18,9 @@ import timber.log.Timber;
 
 @InjectViewState
 public class GitHubParserPresenter extends MvpPresenter<GitHubParserView> {
+
+    private static final String ERROR_MSG = "Failed to get user";
+
     private String username = "z0lk1n";
 
     public class ReposListPresenter {
@@ -64,7 +67,6 @@ public class GitHubParserPresenter extends MvpPresenter<GitHubParserView> {
                 .subscribe(user -> {
                     getViewState().setUsernameText(user.getLogin());
                     getViewState().loadImage(user.getAvatarUrl());
-
                     usersRepo.getUserRepos()
                             .subscribeOn(Schedulers.io())
                             .observeOn(mainThreadScheduler)
@@ -72,7 +74,10 @@ public class GitHubParserPresenter extends MvpPresenter<GitHubParserView> {
                                 listPresenter.reposList = list;
                                 getViewState().updateList();
                             });
-                }, throwable -> Timber.e(throwable, "Failed to get user"));
+                }, throwable -> {
+                    Timber.e(throwable, ERROR_MSG);
+                    getViewState().showNotifyingMessage(ERROR_MSG);
+                });
     }
 
     public void setUsername(String username) {

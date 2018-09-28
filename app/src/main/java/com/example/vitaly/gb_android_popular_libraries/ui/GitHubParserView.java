@@ -13,4 +13,6 @@ public interface GitHubParserView extends MvpView {
     void updateList();
 
     void showChooseUserDialog();
+
+    void showNotifyingMessage(String msg);
 }

@@ -10,6 +10,7 @@ import android.text.InputType;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -82,7 +83,6 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
                     String username = input.getText().toString().trim();
                     if (!username.isEmpty()) {
                         presenter.setUsername(username);
-                        updateList();
                     }
                 })
                 .setNegativeButton("CANCEL", (dialog, which) -> dialog.dismiss());
@@ -92,5 +92,10 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
     @OnClick(R.id.fab_github_parser)
     public void onClickFab()    {
         presenter.chooseUser();
+    }
+
+    @Override
+    public void showNotifyingMessage(String msg)  {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 }
