@@ -2,4 +2,6 @@
     <string name="app_name">GB_Android_Popular_libraries</string>
     <string name="zero">0</string>
     <string name="choose_image">Choose image</string>
+    <string name="avatar">Avatar</string>
+    <string name="homework_4">GitHub Parser [Homework 4]</string>
 </resources>

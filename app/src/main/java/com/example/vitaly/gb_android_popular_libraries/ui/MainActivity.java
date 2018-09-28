@@ -42,22 +42,15 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     private FileConverterManager converter;
     private File storageDir;
 
-    @BindView(R.id.btn_one)
-    Button buttonOne;
-    @BindView(R.id.btn_two)
-    Button buttonTwo;
-    @BindView(R.id.btn_three)
-    Button buttonThree;
-    @BindView(R.id.txt_view)
-    TextView textView;
-    @BindView(R.id.edit_txt)
-    EditText editText;
-    @BindView(R.id.convert_txt_view)
-    TextView convertTextView;
-    @BindView(R.id.convert_btn)
-    Button convertButton;
-    @BindView(R.id.convert_img_view)
-    ImageView imageView;
+    @BindView(R.id.btn_github_parser) Button buttonGitHubParser;
+    @BindView(R.id.btn_one) Button buttonOne;
+    @BindView(R.id.btn_two) Button buttonTwo;
+    @BindView(R.id.btn_three) Button buttonThree;
+    @BindView(R.id.txt_view) TextView textView;
+    @BindView(R.id.edit_txt) EditText editText;
+    @BindView(R.id.convert_txt_view) TextView convertTextView;
+    @BindView(R.id.convert_btn) Button convertButton;
+    @BindView(R.id.convert_img_view) ImageView imageView;
 
     @InjectPresenter
     MainPresenter presenter;
@@ -201,5 +194,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         eventBus.register(observerFirst);
         eventBus.register(observerSecond);
         eventBus.publish(new Event("Event on EventBus"));
+    }
+
+    @OnClick(R.id.btn_github_parser)
+    public void onClick() {
+        startActivity(new Intent(MainActivity.this, GitHubParserActivity.class));
     }
 }
