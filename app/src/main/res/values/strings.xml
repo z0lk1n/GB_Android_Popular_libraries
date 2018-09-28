@@ -7,4 +7,5 @@
     <string name="homework_1">Count Buttons [Homework 1]</string>
     <string name="homework_2">Text Flow [Homework 2]</string>
     <string name="homework_3">Convert Image [Homework 3]</string>
+    <string name="input_text">Input text</string>
 </resources>

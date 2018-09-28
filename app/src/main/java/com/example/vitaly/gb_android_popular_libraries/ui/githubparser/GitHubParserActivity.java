@@ -7,8 +7,10 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +33,7 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
     @BindView(R.id.iv_avatar) ImageView avatarImageView;
     @BindView(R.id.rv_list_repos) RecyclerView recyclerView;
     @BindView(R.id.fab_github_parser) FloatingActionButton fab;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
 
     private ReposAdapter adapter;
     private IImageLoader<ImageView> imageLoader;
@@ -94,5 +97,14 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
     @Override
     public void showNotifyingMessage(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void controlProgressBar(boolean visible)    {
+        if(visible) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+        }
     }
 }
