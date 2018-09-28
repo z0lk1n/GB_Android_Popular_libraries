@@ -9,9 +9,9 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
-public class UsersRepo {
+public final class UsersRepo {
+
     private User user;
-    private List<Repos> reposList;
 
     public Observable<User> getUser(String username) {
         return ApiHolder
@@ -22,13 +22,6 @@ public class UsersRepo {
     }
 
     public Observable<List<Repos>> getUserRepos() {
-        return ApiHolder
-                .getApi()
-                .getUserRepos(user.getReposUrl())
-                .subscribeOn(Schedulers.io())
-                .switchMap(repos -> {
-                    UsersRepo.this.reposList = repos;
-                    return Observable.just(reposList);
-                });
+        return ApiHolder.getApi().getUserRepos(user.getReposUrl());
     }
 }

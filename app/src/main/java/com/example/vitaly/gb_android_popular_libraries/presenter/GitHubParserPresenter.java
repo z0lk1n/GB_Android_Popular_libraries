@@ -6,8 +6,8 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.example.vitaly.gb_android_popular_libraries.model.entity.Repos;
 import com.example.vitaly.gb_android_popular_libraries.model.repo.UsersRepo;
-import com.example.vitaly.gb_android_popular_libraries.ui.GitHubParserView;
-import com.example.vitaly.gb_android_popular_libraries.ui.ReposRowView;
+import com.example.vitaly.gb_android_popular_libraries.ui.githubparser.GitHubParserView;
+import com.example.vitaly.gb_android_popular_libraries.ui.githubparser.ReposRowView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +20,13 @@ import timber.log.Timber;
 public class GitHubParserPresenter extends MvpPresenter<GitHubParserView> {
 
     private static final String ERROR_MSG = "Failed to get user";
-
     private String username = "z0lk1n";
+    private UsersRepo usersRepo;
+    private Scheduler mainThreadScheduler;
+    private ReposListPresenter listPresenter;
 
     public class ReposListPresenter {
+
         private List<Repos> reposList;
 
         ReposListPresenter() {
@@ -38,10 +41,6 @@ public class GitHubParserPresenter extends MvpPresenter<GitHubParserView> {
             return reposList.size();
         }
     }
-
-    private UsersRepo usersRepo;
-    private Scheduler mainThreadScheduler;
-    private ReposListPresenter listPresenter;
 
     public GitHubParserPresenter(Scheduler mainThreadScheduler) {
         this.mainThreadScheduler = mainThreadScheduler;

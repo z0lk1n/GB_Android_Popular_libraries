@@ -13,9 +13,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class FileConverterManagerImpl implements FileConverterManager {
+public final class FileConverterManagerImpl implements FileConverterManager {
 
-    private File storageDir;
+    private final File storageDir;
 
     public FileConverterManagerImpl(File storageDir) {
         this.storageDir = storageDir;
@@ -63,7 +63,7 @@ public class FileConverterManagerImpl implements FileConverterManager {
         return file.getAbsolutePath();
     }
 
-    private String getFileName()   {
+    private String getFileName() {
         return new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
     }
 }

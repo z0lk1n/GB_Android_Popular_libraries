@@ -1,4 +1,4 @@
-package com.example.vitaly.gb_android_popular_libraries.model.image.android;
+package com.example.vitaly.gb_android_popular_libraries.model.image;
 
 import com.bumptech.glide.module.AppGlideModule;
 

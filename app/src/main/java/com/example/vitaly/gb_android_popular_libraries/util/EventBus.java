@@ -5,7 +5,7 @@ import io.reactivex.Observer;
 import io.reactivex.subjects.ReplaySubject;
 import io.reactivex.subjects.Subject;
 
-public class EventBus<T> {
+public final class EventBus<T> {
 
     private final Subject<T> subject;
 

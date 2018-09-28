@@ -1,4 +1,4 @@
-package com.example.vitaly.gb_android_popular_libraries.ui;
+package com.example.vitaly.gb_android_popular_libraries.ui.githubparser;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,8 +16,8 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.vitaly.gb_android_popular_libraries.R;
+import com.example.vitaly.gb_android_popular_libraries.model.image.GlideImageLoader;
 import com.example.vitaly.gb_android_popular_libraries.model.image.IImageLoader;
-import com.example.vitaly.gb_android_popular_libraries.model.image.android.GlideImageLoader;
 import com.example.vitaly.gb_android_popular_libraries.presenter.GitHubParserPresenter;
 
 import butterknife.BindView;
@@ -47,11 +47,8 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_github_parser);
         ButterKnife.bind(this);
-
         imageLoader = new GlideImageLoader();
-
         adapter = new ReposAdapter(presenter.getListPresenter());
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
@@ -90,12 +87,12 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
     }
 
     @OnClick(R.id.fab_github_parser)
-    public void onClickFab()    {
+    public void onClickFab() {
         presenter.chooseUser();
     }
 
     @Override
-    public void showNotifyingMessage(String msg)  {
+    public void showNotifyingMessage(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 }

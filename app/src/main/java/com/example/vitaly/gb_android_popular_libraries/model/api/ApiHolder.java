@@ -9,7 +9,9 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiHolder {
+
     private static ApiHolder instance = new ApiHolder();
+    private IDataSource api;
 
     private static ApiHolder getInstance() {
         if (instance == null) {
@@ -17,8 +19,6 @@ public class ApiHolder {
         }
         return instance;
     }
-
-    private IDataSource api;
 
     private ApiHolder() {
         Gson gson = new GsonBuilder()

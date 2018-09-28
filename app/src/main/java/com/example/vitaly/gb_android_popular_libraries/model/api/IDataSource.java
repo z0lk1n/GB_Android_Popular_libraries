@@ -11,6 +11,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Url;
 
 public interface IDataSource {
+
     @GET("/users/{user}")
     Observable<User> getUser(@Path("user") String username);
 
