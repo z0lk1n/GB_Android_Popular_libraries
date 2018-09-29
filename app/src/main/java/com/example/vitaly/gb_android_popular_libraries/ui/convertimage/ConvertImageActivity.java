@@ -2,13 +2,12 @@ package com.example.vitaly.gb_android_popular_libraries.ui.convertimage;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
@@ -20,7 +19,6 @@ import com.example.vitaly.gb_android_popular_libraries.util.FileConverterManager
 import com.example.vitaly.gb_android_popular_libraries.util.FileConverterManagerImpl;
 import com.example.vitaly.gb_android_popular_libraries.util.SchedulersProviderImpl;
 
-import java.io.File;
 import java.io.InputStream;
 
 import butterknife.BindView;
@@ -31,20 +29,18 @@ public class ConvertImageActivity extends MvpAppCompatActivity implements Conver
 
     private static final int PICK_IMAGE = 1;
     private FileConverterManager converter;
-    private File storageDir;
+    private AlertDialog alertDialog;
 
-    @BindView(R.id.convert_txt_view) TextView convertTextView;
-    @BindView(R.id.convert_btn) Button convertButton;
-    @BindView(R.id.convert_img_view) ImageView imageView;
+    @BindView(R.id.tv_convert_image) TextView convertTextView;
+    @BindView(R.id.fab_convert_image) FloatingActionButton fab;
 
     @InjectPresenter
     ConvertImagePresenter presenter;
 
     @ProvidePresenter
     public ConvertImagePresenter provideMainPresenter() {
-        converter = new FileConverterManagerImpl(storageDir);
-        presenter = new ConvertImagePresenter(new SchedulersProviderImpl(), converter);
-        return presenter;
+        converter = new FileConverterManagerImpl(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES));
+        return new ConvertImagePresenter(new SchedulersProviderImpl(), converter);
     }
 
     @Override
@@ -52,10 +48,9 @@ public class ConvertImageActivity extends MvpAppCompatActivity implements Conver
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_convert_image);
         ButterKnife.bind(ConvertImageActivity.this);
-        storageDir = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
     }
 
-    @OnClick(R.id.convert_btn)
+    @OnClick(R.id.fab_convert_image)
     public void onClickConvertBtn() {
         presenter.chooseImageClick();
     }
@@ -63,7 +58,10 @@ public class ConvertImageActivity extends MvpAppCompatActivity implements Conver
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+            if (data == null || data.getData() == null) {
+                return;
+            }
             try {
                 InputStream stream = getContentResolver().openInputStream(data.getData());
                 presenter.sendByteArrayFromRequest(converter.getByteArrayFromStream(stream));
@@ -81,18 +79,29 @@ public class ConvertImageActivity extends MvpAppCompatActivity implements Conver
     }
 
     @Override
-    public void setImageOnView(String path) {
-        imageView.setImageURI(Uri.fromFile(new File(path)));
+    public void setImageListOnView(String imageList) {
+        convertTextView.setText(imageList);
     }
 
     @Override
     public void showProgressDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ConvertImageActivity.this)
-                .setTitle("Convert image file...")
-                .setNegativeButton("CANCEL", (dialog, which) -> {
+        final ProgressBar progressBar = new ProgressBar(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle(R.string.convert_dialog_title)
+                .setView(progressBar)
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {
                     presenter.cancelFileConversion();
                     dialog.dismiss();
                 });
-        builder.show();
+        alertDialog = builder.show();
+    }
+
+    @Override
+    public void closeProgressDialog() {
+        if (alertDialog == null) {
+            return;
+        }
+        alertDialog.dismiss();
+        alertDialog = null;
     }
 }

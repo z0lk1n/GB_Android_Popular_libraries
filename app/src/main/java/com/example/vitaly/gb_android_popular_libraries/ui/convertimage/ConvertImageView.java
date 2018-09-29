@@ -11,5 +11,7 @@ public interface ConvertImageView extends MvpView {
 
     void showProgressDialog();
 
-    void setImageOnView(String path);
+    void setImageListOnView(String imageList);
+
+    void closeProgressDialog();
 }

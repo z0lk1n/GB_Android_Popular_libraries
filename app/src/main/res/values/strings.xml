@@ -8,4 +8,7 @@
     <string name="homework_2">Text Flow [Homework 2]</string>
     <string name="homework_3">Convert Image [Homework 3]</string>
     <string name="input_text">Input text</string>
+    <string name="prefix">IMG_</string>
+    <string name="cancel">CANCEL</string>
+    <string name="convert_dialog_title">Convert image file</string>
 </resources>

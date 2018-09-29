@@ -10,10 +10,8 @@ import com.example.vitaly.gb_android_popular_libraries.util.SchedulersProvider;
 
 import java.io.IOException;
 
-import io.reactivex.Completable;
-import io.reactivex.Single;
+import io.reactivex.CompletableObserver;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableSingleObserver;
 
 @InjectViewState
 public class ConvertImagePresenter extends MvpPresenter<ConvertImageView> {
@@ -25,59 +23,48 @@ public class ConvertImagePresenter extends MvpPresenter<ConvertImageView> {
     public ConvertImagePresenter(SchedulersProvider schedulers, FileConverterManager converter) {
         this.schedulers = schedulers;
         this.converter = converter;
+        showImageList();
     }
 
     public void chooseImageClick() {
         getViewState().pickImage();
     }
 
-    @SuppressLint("CheckResult")
-    public void sendByteArrayFromRequest(byte[] byteArray) {
-        Single<byte[]> single = Single.just(byteArray)
-                .subscribeOn(schedulers.io())
-                .observeOn(schedulers.computation());
-
-        disposable = single.subscribeWith(new DisposableSingleObserver<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                showProgressDialog();
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                createImageFileFromByteArray(byteArray);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-        });
-    }
-
-    private void createImageFileFromByteArray(byte[] byteArr) {
-        String suffix = ".png";
+    public void sendByteArrayFromRequest(byte[] byteArr) {
         try {
-            byte[] convertByteArr = converter.convertToPNG(byteArr);
-            String filePath = converter.createImageFile(suffix, convertByteArr);
-            showImage(filePath);
+            converter.convertToPNG(byteArr)
+                    .subscribeOn(schedulers.io())
+                    .observeOn(schedulers.ui())
+                    .subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            disposable = d;
+                            getViewState().showProgressDialog();
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            getViewState().closeProgressDialog();
+                            showImageList();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            getViewState().closeProgressDialog();
+                            showImageList();
+                        }
+                    });
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @SuppressLint("CheckResult")
-    private void showImage(String path) {
-        Single.just(path)
+    private void showImageList() {
+        converter.getImageListFromDir()
+                .subscribeOn(schedulers.io())
                 .observeOn(schedulers.ui())
-                .subscribe(s -> getViewState().setImageOnView(s));
-    }
-
-    @SuppressLint("CheckResult")
-    private void showProgressDialog() {
-        Completable.fromAction(() -> getViewState().showProgressDialog())
-                .subscribeOn(schedulers.ui());
+                .subscribe(s -> getViewState().setImageListOnView(s));
     }
 
     public void cancelFileConversion() {

@@ -74,9 +74,9 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
 
     @Override
     public void showChooseUserDialog() {
-        final EditText input = new EditText(GitHubParserActivity.this);
+        final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        AlertDialog.Builder builder = new AlertDialog.Builder(GitHubParserActivity.this)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setView(input)
                 .setTitle("Input username")
                 .setPositiveButton("OK", (dialog, which) -> {
@@ -100,7 +100,7 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
     }
 
     @Override
-    public void controlProgressBar(boolean visible)    {
+    public void showProgressBar(boolean visible)    {
         if(visible) {
             progressBar.setVisibility(View.VISIBLE);
         } else {
