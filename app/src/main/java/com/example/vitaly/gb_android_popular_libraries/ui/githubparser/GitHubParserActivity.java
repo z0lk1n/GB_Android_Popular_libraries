@@ -1,4 +1,4 @@
-package com.example.vitaly.gb_android_popular_libraries.ui;
+package com.example.vitaly.gb_android_popular_libraries.ui.githubparser;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,8 +7,10 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,8 +18,8 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.vitaly.gb_android_popular_libraries.R;
+import com.example.vitaly.gb_android_popular_libraries.model.image.GlideImageLoader;
 import com.example.vitaly.gb_android_popular_libraries.model.image.IImageLoader;
-import com.example.vitaly.gb_android_popular_libraries.model.image.android.GlideImageLoader;
 import com.example.vitaly.gb_android_popular_libraries.presenter.GitHubParserPresenter;
 
 import butterknife.BindView;
@@ -31,6 +33,7 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
     @BindView(R.id.iv_avatar) ImageView avatarImageView;
     @BindView(R.id.rv_list_repos) RecyclerView recyclerView;
     @BindView(R.id.fab_github_parser) FloatingActionButton fab;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
 
     private ReposAdapter adapter;
     private IImageLoader<ImageView> imageLoader;
@@ -47,11 +50,8 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_github_parser);
         ButterKnife.bind(this);
-
         imageLoader = new GlideImageLoader();
-
         adapter = new ReposAdapter(presenter.getListPresenter());
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
@@ -74,9 +74,9 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
 
     @Override
     public void showChooseUserDialog() {
-        final EditText input = new EditText(GitHubParserActivity.this);
+        final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        AlertDialog.Builder builder = new AlertDialog.Builder(GitHubParserActivity.this)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setView(input)
                 .setTitle("Input username")
                 .setPositiveButton("OK", (dialog, which) -> {
@@ -90,12 +90,21 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
     }
 
     @OnClick(R.id.fab_github_parser)
-    public void onClickFab()    {
+    public void onClickFab() {
         presenter.chooseUser();
     }
 
     @Override
-    public void showNotifyingMessage(String msg)  {
+    public void showNotifyingMessage(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showProgressBar(boolean visible)    {
+        if(visible) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+        }
     }
 }

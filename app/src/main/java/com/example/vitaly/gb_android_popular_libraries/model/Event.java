@@ -1,6 +1,6 @@
-package com.example.vitaly.gb_android_popular_libraries.util;
+package com.example.vitaly.gb_android_popular_libraries.model;
 
-public class Event {
+public final class Event {
 
     private final String message;
 

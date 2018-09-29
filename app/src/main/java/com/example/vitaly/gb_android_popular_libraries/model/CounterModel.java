@@ -5,9 +5,9 @@ import java.util.List;
 
 import io.reactivex.Single;
 
-public class CounterModel {
+public final class CounterModel {
 
-    private List<Integer> counters;
+    private final List<Integer> counters;
 
     public CounterModel() {
         counters = new ArrayList<>();

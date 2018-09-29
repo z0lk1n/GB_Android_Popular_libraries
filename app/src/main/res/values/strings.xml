@@ -4,4 +4,11 @@
     <string name="choose_image">Choose image</string>
     <string name="avatar">Avatar</string>
     <string name="homework_4">GitHub Parser [Homework 4]</string>
+    <string name="homework_1">Count Buttons [Homework 1]</string>
+    <string name="homework_2">Text Flow [Homework 2]</string>
+    <string name="homework_3">Convert Image [Homework 3]</string>
+    <string name="input_text">Input text</string>
+    <string name="prefix">IMG_</string>
+    <string name="cancel">CANCEL</string>
+    <string name="convert_dialog_title">Convert image file</string>
 </resources>

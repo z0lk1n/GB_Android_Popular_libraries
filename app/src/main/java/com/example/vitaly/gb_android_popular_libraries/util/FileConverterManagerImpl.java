@@ -1,5 +1,6 @@
 package com.example.vitaly.gb_android_popular_libraries.util;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
@@ -9,61 +10,76 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
-public class FileConverterManagerImpl implements FileConverterManager {
+import io.reactivex.Completable;
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 
-    private File storageDir;
+public final class FileConverterManagerImpl implements FileConverterManager {
+
+    private final File storageDir;
 
     public FileConverterManagerImpl(File storageDir) {
         this.storageDir = storageDir;
     }
 
     @Override
-    public byte[] getByteArrayFromStream(InputStream inputStream) throws IOException {
+    @SuppressLint("CheckResult")
+    public byte[] getByteArrayFromStream(final InputStream inputStream) {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
 
-        int bufferSize = 1024;
-        byte[] buffer = new byte[bufferSize];
-        int len;
-        while (inputStream.available() > 0 && (len = inputStream.read(buffer)) != -1) {
-            byteBuffer.write(buffer, 0, len);
-        }
+        Completable.fromAction(() -> {
+            int bufferSize = 1024;
+            byte[] buffer = new byte[bufferSize];
+            int len;
+            while (inputStream.available() > 0 && (len = inputStream.read(buffer)) != -1) {
+                byteBuffer.write(buffer, 0, len);
+            }
+        }).subscribeOn(Schedulers.io());
 
         return byteBuffer.toByteArray();
     }
 
     @Override
-    public byte[] convertToPNG(byte[] rawByteArr) throws IOException {
-        ByteArrayOutputStream convertStream = new ByteArrayOutputStream();
+    public Completable convertToPNG(final byte[] byteArr) {
+        return Completable.create(emitter -> {
+            try {
+                Thread.sleep(3000);
+                createPngFileFromByteArray(byteArr);
+                emitter.onComplete();
+            } catch (Exception e) {
+                if (!emitter.isDisposed()) {
+                    emitter.onError(e);
+                }
+            }
+        });
+    }
+
+    private void createPngFileFromByteArray(byte[] byteArr) throws IOException {
+        String prefix = "IMG_";
+        String suffix = ".png";
+
+        FileOutputStream out = new FileOutputStream(File.createTempFile(prefix, suffix, storageDir));
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inMutable = true;
-        Bitmap bitmap = BitmapFactory.decodeByteArray(rawByteArr, 0, rawByteArr.length, options);
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, convertStream);
 
-        byte[] convertByteArray = convertStream.toByteArray();
+        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArr, 0, byteArr.length, options);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
 
-        convertStream.close();
         bitmap.recycle();
-
-        return convertByteArray;
+        out.close();
     }
 
     @NonNull
     @Override
-    public String createImageFile(String suffix, byte[] byteArr) throws IOException {
-        File file = File.createTempFile(getFileName(), suffix, storageDir);
-        FileOutputStream out = new FileOutputStream(file);
-        out.write(byteArr);
-        out.flush();
-        out.close();
-        return file.getAbsolutePath();
-    }
-
-    private String getFileName()   {
-        return new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+    public Single<String> getImageListFromDir() {
+        return Single.fromCallable(() -> {
+            StringBuilder sb = new StringBuilder();
+            for (File file : storageDir.listFiles()) {
+                sb.append(file.getName()).append("\n");
+            }
+            return sb.toString();
+        });
     }
 }

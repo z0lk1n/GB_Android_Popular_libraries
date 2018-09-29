@@ -1,5 +1,6 @@
-package com.example.vitaly.gb_android_popular_libraries.ui;
+package com.example.vitaly.gb_android_popular_libraries.ui.githubparser;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,17 +17,18 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> 
 
     private GitHubParserPresenter.ReposListPresenter listPresenter;
 
-    public ReposAdapter(GitHubParserPresenter.ReposListPresenter listPresenter) {
+    ReposAdapter(GitHubParserPresenter.ReposListPresenter listPresenter) {
         this.listPresenter = listPresenter;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_repos, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(ReposAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ReposAdapter.ViewHolder holder, int position) {
         listPresenter.bindViewAt(position, holder);
     }
 
@@ -41,6 +43,7 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements ReposRowView {
+
         @BindView(R.id.tv_repos) TextView reposTextView;
 
         ViewHolder(View itemView) {
