@@ -25,7 +25,7 @@ public final class FileConverterManagerImpl implements FileConverterManager {
 
     @Override
     @SuppressLint("CheckResult")
-    public byte[] getByteArrayFromStream(final InputStream inputStream) throws IOException {
+    public byte[] getByteArrayFromStream(final InputStream inputStream) {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
 
         Completable.fromAction(() -> {
