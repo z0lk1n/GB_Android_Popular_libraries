@@ -89,10 +89,7 @@ public class ConvertImageActivity extends MvpAppCompatActivity implements Conver
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle(R.string.convert_dialog_title)
                 .setView(progressBar)
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {
-                    presenter.cancelFileConversion();
-                    dialog.dismiss();
-                });
+                .setNegativeButton(R.string.cancel, (dialog, which) -> presenter.cancelFileConversion());
         alertDialog = builder.show();
     }
 

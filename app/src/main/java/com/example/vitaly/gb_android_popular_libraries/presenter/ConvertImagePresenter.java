@@ -68,6 +68,7 @@ public class ConvertImagePresenter extends MvpPresenter<ConvertImageView> {
     }
 
     public void cancelFileConversion() {
+        getViewState().closeProgressDialog();
         if (!disposable.isDisposed()) {
             disposable.dispose();
         }

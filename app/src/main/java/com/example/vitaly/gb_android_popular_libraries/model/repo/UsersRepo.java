@@ -6,14 +6,14 @@ import com.example.vitaly.gb_android_popular_libraries.model.entity.User;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
 public final class UsersRepo {
 
     private User user;
 
-    public Observable<User> getUser(String username) {
+    public Single<User> getUser(String username) {
         return ApiHolder
                 .getApi()
                 .getUser(username)
@@ -21,7 +21,7 @@ public final class UsersRepo {
                 .map(user -> this.user = user);
     }
 
-    public Observable<List<Repos>> getUserRepos() {
+    public Single<List<Repos>> getUserRepos() {
         return ApiHolder.getApi().getUserRepos(user.getReposUrl());
     }
 }
