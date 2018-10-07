@@ -16,14 +16,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CountButtonsActivity extends MvpAppCompatActivity implements CountButtonsView {
+public final class CountButtonsActivity extends MvpAppCompatActivity implements CountButtonsView {
 
     @BindView(R.id.btn_one) Button buttonOne;
     @BindView(R.id.btn_two) Button buttonTwo;
     @BindView(R.id.btn_three) Button buttonThree;
 
-    @InjectPresenter
-    CountButtonsPresenter presenter;
+    @InjectPresenter CountButtonsPresenter presenter;
 
     @ProvidePresenter
     public CountButtonsPresenter provideMainPresenter() {

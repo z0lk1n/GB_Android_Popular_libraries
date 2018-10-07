@@ -13,7 +13,7 @@ import com.example.vitaly.gb_android_popular_libraries.presenter.GitHubParserPre
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> implements ReposListView {
+public final class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> implements ReposListView {
 
     private GitHubParserPresenter.ReposListPresenter listPresenter;
 
@@ -44,7 +44,7 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements ReposRowView {
 
-        @BindView(R.id.tv_repos) TextView reposTextView;
+        @BindView(R.id.tv_repos) TextView repoTextView;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -52,8 +52,8 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> 
         }
 
         @Override
-        public void setReposName(String name) {
-            reposTextView.setText(name);
+        public void setRepoName(String name) {
+            repoTextView.setText(name);
         }
     }
 }

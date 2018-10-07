@@ -1,4 +1,4 @@
-package com.example.vitaly.gb_android_popular_libraries.model.image;
+package com.example.vitaly.gb_android_popular_libraries.model.image.glide;
 
 import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
@@ -9,11 +9,14 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.vitaly.gb_android_popular_libraries.model.image.ImageLoader;
 
-public class GlideImageLoader implements IImageLoader<ImageView> {
+import org.jetbrains.annotations.NotNull;
+
+public final class GlideImageLoader implements ImageLoader<ImageView> {
 
     @Override
-    public void loadInto(String url, ImageView container) {
+    public void loadInto(String url, @NotNull ImageView container) {
         Glide.with(container.getContext())
                 .asBitmap()
                 .load(url)

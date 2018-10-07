@@ -25,7 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ConvertImageActivity extends MvpAppCompatActivity implements ConvertImageView {
+public final class ConvertImageActivity extends MvpAppCompatActivity implements ConvertImageView {
 
     private static final int PICK_IMAGE = 1;
     private FileConverterManager converter;
@@ -34,8 +34,7 @@ public class ConvertImageActivity extends MvpAppCompatActivity implements Conver
     @BindView(R.id.tv_convert_image) TextView convertTextView;
     @BindView(R.id.fab_convert_image) FloatingActionButton fab;
 
-    @InjectPresenter
-    ConvertImagePresenter presenter;
+    @InjectPresenter ConvertImagePresenter presenter;
 
     @ProvidePresenter
     public ConvertImagePresenter provideMainPresenter() {

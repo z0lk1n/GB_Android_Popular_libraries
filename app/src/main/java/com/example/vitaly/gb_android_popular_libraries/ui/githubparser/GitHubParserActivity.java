@@ -17,17 +17,19 @@ import android.widget.Toast;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.example.vitaly.gb_android_popular_libraries.App;
 import com.example.vitaly.gb_android_popular_libraries.R;
-import com.example.vitaly.gb_android_popular_libraries.model.image.GlideImageLoader;
-import com.example.vitaly.gb_android_popular_libraries.model.image.IImageLoader;
+import com.example.vitaly.gb_android_popular_libraries.model.image.ImageLoader;
 import com.example.vitaly.gb_android_popular_libraries.presenter.GitHubParserPresenter;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
-public class GitHubParserActivity extends MvpAppCompatActivity implements GitHubParserView {
+public final class GitHubParserActivity extends MvpAppCompatActivity implements GitHubParserView {
 
     @BindView(R.id.tv_username) TextView usernameTextView;
     @BindView(R.id.iv_avatar) ImageView avatarImageView;
@@ -36,21 +38,27 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
     @BindView(R.id.progress_bar) ProgressBar progressBar;
 
     private ReposAdapter adapter;
-    private IImageLoader<ImageView> imageLoader;
+
+    @Inject ImageLoader<ImageView> imageLoader;
 
     @InjectPresenter GitHubParserPresenter presenter;
 
     @ProvidePresenter
     public GitHubParserPresenter provideGitHubParserPresenter() {
-        return new GitHubParserPresenter(AndroidSchedulers.mainThread());
+        GitHubParserPresenter presenter = new GitHubParserPresenter(AndroidSchedulers.mainThread());
+        App.getInstance().getAppComponent().inject(presenter);
+        return presenter;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_github_parser);
+
+        App.getInstance().getAppComponent().inject(this);
+
         ButterKnife.bind(this);
-        imageLoader = new GlideImageLoader();
+
         adapter = new ReposAdapter(presenter.getListPresenter());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -68,7 +76,7 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
     }
 
     @Override
-    public void updateList() {
+    public void updateRepoList() {
         adapter.refreshView();
     }
 
@@ -78,14 +86,14 @@ public class GitHubParserActivity extends MvpAppCompatActivity implements GitHub
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setView(input)
-                .setTitle("Input username")
-                .setPositiveButton("OK", (dialog, which) -> {
+                .setTitle(R.string.input_username)
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
                     String username = input.getText().toString().trim();
                     if (!username.isEmpty()) {
                         presenter.setUsername(username);
                     }
                 })
-                .setNegativeButton("CANCEL", (dialog, which) -> dialog.dismiss());
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 

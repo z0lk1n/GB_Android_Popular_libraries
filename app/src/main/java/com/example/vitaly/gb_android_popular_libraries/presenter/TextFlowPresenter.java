@@ -5,7 +5,7 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.example.vitaly.gb_android_popular_libraries.ui.textflow.TextFlowView;
 
 @InjectViewState
-public class TextFlowPresenter extends MvpPresenter<TextFlowView> {
+public final class TextFlowPresenter extends MvpPresenter<TextFlowView> {
 
     public TextFlowPresenter() {
     }

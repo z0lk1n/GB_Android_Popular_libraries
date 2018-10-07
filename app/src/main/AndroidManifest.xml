@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.vitaly.gb_android_popular_libraries">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".App"
@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,10 +24,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".ui.countbuttons.CountButtonsActivity" />
+
         <activity android:name=".ui.githubparser.GitHubParserActivity" />
+
         <activity android:name=".ui.textflow.TextFlowActivity" />
+
         <activity android:name=".ui.convertimage.ConvertImageActivity" />
+
+        <!--<provider-->
+        <!--android:name="com.activeandroid.content.ContentProvider"-->
+        <!--android:authorities="@string/app_name"-->
+        <!--android:exported="false"-->
+        <!--android:grantUriPermissions="true" />-->
     </application>
 
+    <meta-data
+        android:name="AA_DB_NAME"
+        android:value="MyDatabase" />
+
+    <meta-data
+        android:name="AA_DB_VERSION"
+        android:value="1" />
+
+    <meta-data
+        android:name="AA_MODELS"
+        android:value="com.example.vitaly.gb_android_popular_libraries.model.entity.activeandroid.AAUser,
+                       com.example.vitaly.gb_android_popular_libraries.model.entity.activeandroid.AARepository,
+                       com.example.vitaly.gb_android_popular_libraries.model.entity.activeandroid.AAImage" />
 </manifest>

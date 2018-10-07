@@ -14,7 +14,7 @@ import io.reactivex.CompletableObserver;
 import io.reactivex.disposables.Disposable;
 
 @InjectViewState
-public class ConvertImagePresenter extends MvpPresenter<ConvertImageView> {
+public final class ConvertImagePresenter extends MvpPresenter<ConvertImageView> {
 
     private SchedulersProvider schedulers;
     private FileConverterManager converter;

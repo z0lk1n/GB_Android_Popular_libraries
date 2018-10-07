@@ -19,13 +19,12 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
-public class TextFlowActivity extends MvpAppCompatActivity implements TextFlowView {
+public final class TextFlowActivity extends MvpAppCompatActivity implements TextFlowView {
 
     @BindView(R.id.txt_view) TextView textView;
     @BindView(R.id.edit_txt) EditText editText;
 
-    @InjectPresenter
-    TextFlowPresenter presenter;
+    @InjectPresenter TextFlowPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
