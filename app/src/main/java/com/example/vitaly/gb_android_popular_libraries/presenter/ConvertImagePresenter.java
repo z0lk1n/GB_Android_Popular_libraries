@@ -10,6 +10,8 @@ import com.example.vitaly.gb_android_popular_libraries.util.SchedulersProvider;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import io.reactivex.CompletableObserver;
 import io.reactivex.disposables.Disposable;
 
@@ -17,12 +19,13 @@ import io.reactivex.disposables.Disposable;
 public final class ConvertImagePresenter extends MvpPresenter<ConvertImageView> {
 
     private SchedulersProvider schedulers;
-    private FileConverterManager converter;
     private Disposable disposable;
 
-    public ConvertImagePresenter(SchedulersProvider schedulers, FileConverterManager converter) {
+    @Inject FileConverterManager converter;
+
+    public ConvertImagePresenter(SchedulersProvider schedulers) {
         this.schedulers = schedulers;
-        this.converter = converter;
+        //FIXME crash app
         showImageList();
     }
 

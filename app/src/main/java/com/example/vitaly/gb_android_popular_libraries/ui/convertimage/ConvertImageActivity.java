@@ -3,7 +3,6 @@ package com.example.vitaly.gb_android_popular_libraries.ui.convertimage;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -13,13 +12,15 @@ import android.widget.TextView;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.example.vitaly.gb_android_popular_libraries.App;
 import com.example.vitaly.gb_android_popular_libraries.R;
 import com.example.vitaly.gb_android_popular_libraries.presenter.ConvertImagePresenter;
 import com.example.vitaly.gb_android_popular_libraries.util.FileConverterManager;
-import com.example.vitaly.gb_android_popular_libraries.util.FileConverterManagerImpl;
 import com.example.vitaly.gb_android_popular_libraries.util.SchedulersProviderImpl;
 
 import java.io.InputStream;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,8 +29,9 @@ import butterknife.OnClick;
 public final class ConvertImageActivity extends MvpAppCompatActivity implements ConvertImageView {
 
     private static final int PICK_IMAGE = 1;
-    private FileConverterManager converter;
     private AlertDialog alertDialog;
+
+    @Inject FileConverterManager converter;
 
     @BindView(R.id.tv_convert_image) TextView convertTextView;
     @BindView(R.id.fab_convert_image) FloatingActionButton fab;
@@ -38,14 +40,16 @@ public final class ConvertImageActivity extends MvpAppCompatActivity implements 
 
     @ProvidePresenter
     public ConvertImagePresenter provideMainPresenter() {
-        converter = new FileConverterManagerImpl(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES));
-        return new ConvertImagePresenter(new SchedulersProviderImpl(), converter);
+        ConvertImagePresenter presenter = new ConvertImagePresenter(new SchedulersProviderImpl());
+        App.getInstance().getAppComponent().inject(presenter);
+        return presenter;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_convert_image);
+        App.getInstance().getAppComponent().inject(this);
         ButterKnife.bind(ConvertImageActivity.this);
     }
 
@@ -73,7 +77,7 @@ public final class ConvertImageActivity extends MvpAppCompatActivity implements 
     @Override
     public void pickImage() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/jpeg");
+        intent.setType(getString(R.string.image_type));
         startActivityForResult(intent, PICK_IMAGE);
     }
 
