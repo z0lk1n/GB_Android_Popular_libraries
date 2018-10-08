@@ -27,7 +27,7 @@ public class RealmImageCache implements ImageCache {
         RealmImage realmImage = realm.where(RealmImage.class).equalTo("url", sha1).findFirst();
 
         try {
-            File file = File.createTempFile("IMG", ".png", new File(cachePath));
+            File file = File.createTempFile("IMG_", ".png", new File(cachePath));
             String imagePath = file.toString();
 
             FileOutputStream out = new FileOutputStream(file);

@@ -25,7 +25,7 @@ public class AAImageCache implements ImageCache {
         try {
             String sha1 = Hash.SHA1(url);
 
-            File file = File.createTempFile("IMG", ".png", new File(cachePath));
+            File file = File.createTempFile("IMG_", ".png", new File(cachePath));
 
             FileOutputStream out = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);

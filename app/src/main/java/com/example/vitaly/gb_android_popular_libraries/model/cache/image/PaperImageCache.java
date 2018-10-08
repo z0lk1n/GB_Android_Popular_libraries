@@ -22,7 +22,7 @@ public class PaperImageCache implements ImageCache {
     @Override
     public void saveImage(String url, Bitmap bitmap) {
         try {
-            File file = File.createTempFile("IMG", ".png", new File(cachePath));
+            File file = File.createTempFile("IMG_", ".png", new File(cachePath));
 
             FileOutputStream out = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
