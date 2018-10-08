@@ -17,15 +17,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends MvpAppCompatActivity implements MainView {
+public final class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @BindView(R.id.btn_count_buttons) Button buttonCountButtons;
     @BindView(R.id.btn_text_flow) Button buttonTextFlow;
     @BindView(R.id.btn_convert_image) Button buttonConvertImage;
     @BindView(R.id.btn_github_parser) Button buttonGitHubParser;
 
-    @InjectPresenter
-    MainPresenter presenter;
+    @InjectPresenter MainPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

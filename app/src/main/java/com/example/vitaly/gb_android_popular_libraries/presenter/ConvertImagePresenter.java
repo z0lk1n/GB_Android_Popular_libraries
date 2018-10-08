@@ -10,19 +10,26 @@ import com.example.vitaly.gb_android_popular_libraries.util.SchedulersProvider;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import io.reactivex.CompletableObserver;
 import io.reactivex.disposables.Disposable;
 
 @InjectViewState
-public class ConvertImagePresenter extends MvpPresenter<ConvertImageView> {
+public final class ConvertImagePresenter extends MvpPresenter<ConvertImageView> {
 
     private SchedulersProvider schedulers;
-    private FileConverterManager converter;
     private Disposable disposable;
 
-    public ConvertImagePresenter(SchedulersProvider schedulers, FileConverterManager converter) {
+    @Inject FileConverterManager converter;
+
+    public ConvertImagePresenter(SchedulersProvider schedulers) {
         this.schedulers = schedulers;
-        this.converter = converter;
+    }
+
+    @Override
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
         showImageList();
     }
 

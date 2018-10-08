@@ -3,12 +3,15 @@
     <string name="zero">0</string>
     <string name="choose_image">Choose image</string>
     <string name="avatar">Avatar</string>
-    <string name="homework_4">GitHub Parser [Homework 4]</string>
-    <string name="homework_1">Count Buttons [Homework 1]</string>
-    <string name="homework_2">Text Flow [Homework 2]</string>
-    <string name="homework_3">Convert Image [Homework 3]</string>
+    <string name="github_parser">GitHub Parser</string>
+    <string name="count_buttons">Count Buttons</string>
+    <string name="text_flow">Text Flow</string>
+    <string name="convert_image">Convert Image</string>
     <string name="input_text">Input text</string>
+    <string name="input_username">Input username</string>
     <string name="prefix">IMG_</string>
+    <string name="ok">OK</string>
     <string name="cancel">CANCEL</string>
     <string name="convert_dialog_title">Convert image file</string>
+    <string name="image_type">image/jpeg</string>
 </resources>

@@ -8,11 +8,12 @@ import com.example.vitaly.gb_android_popular_libraries.ui.countbuttons.CountButt
 import com.example.vitaly.gb_android_popular_libraries.util.SchedulersProvider;
 
 @InjectViewState
-public class CountButtonsPresenter extends MvpPresenter<CountButtonsView> {
+public final class CountButtonsPresenter extends MvpPresenter<CountButtonsView> {
 
     private static final int FIRST = 0;
     private static final int SECOND = 1;
     private static final int THIRD = 2;
+
     private CounterModel model;
     private SchedulersProvider schedulers;
 
