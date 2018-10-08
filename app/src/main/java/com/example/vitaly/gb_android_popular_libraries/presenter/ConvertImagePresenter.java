@@ -25,7 +25,11 @@ public final class ConvertImagePresenter extends MvpPresenter<ConvertImageView> 
 
     public ConvertImagePresenter(SchedulersProvider schedulers) {
         this.schedulers = schedulers;
-        //FIXME crash app
+    }
+
+    @Override
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
         showImageList();
     }
 
