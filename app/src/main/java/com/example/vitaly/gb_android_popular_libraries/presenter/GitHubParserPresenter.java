@@ -21,7 +21,7 @@ import io.reactivex.Scheduler;
 import timber.log.Timber;
 
 @InjectViewState
-public final class GitHubParserPresenter extends MvpPresenter<GitHubParserView> {
+public class GitHubParserPresenter extends MvpPresenter<GitHubParserView> {
 
     public final class ReposListPresenter {
 
@@ -66,7 +66,7 @@ public final class GitHubParserPresenter extends MvpPresenter<GitHubParserView> 
     }
 
     @SuppressLint("CheckResult")
-    private void loadData() {
+    public void loadData() {
         getViewState().showProgressBar(true);
         usersRepo.getUser(username)
                 .observeOn(mainThreadScheduler)
