@@ -53,7 +53,7 @@ public class GitHubParserPresenterUnitTest {
     }
 
     @Test
-    public void loadInfoSuccess() {
+    public void loadDataTestSuccess() {
         User user = new User("googlesamples", "avatarUrl", "someUrl");
         TestComponent component = DaggerTestComponent.builder()
                 .testRepoModule(new TestRepoModule() {
@@ -77,9 +77,8 @@ public class GitHubParserPresenterUnitTest {
         Mockito.verify(view).updateRepoList();
     }
 
-
     @Test
-    public void loadInfoFailure() {
+    public void loadDataTestFailure() {
 
     }
 }

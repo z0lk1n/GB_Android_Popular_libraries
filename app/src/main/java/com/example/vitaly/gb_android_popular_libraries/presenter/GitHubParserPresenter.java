@@ -21,7 +21,7 @@ import io.reactivex.Scheduler;
 import timber.log.Timber;
 
 @InjectViewState
-public class GitHubParserPresenter extends MvpPresenter<GitHubParserView> {
+public final class GitHubParserPresenter extends MvpPresenter<GitHubParserView> {
 
     public final class ReposListPresenter {
 
