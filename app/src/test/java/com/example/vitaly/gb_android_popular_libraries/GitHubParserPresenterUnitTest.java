@@ -54,13 +54,14 @@ public class GitHubParserPresenterUnitTest {
 
     @Test
     public void loadDataTestSuccess() {
-        User user = new User("googlesamples", "avatarUrl", "someUrl");
+        User user = new User("z0lk1n", "avatarUrl", "someUrl");
+
         TestComponent component = DaggerTestComponent.builder()
                 .testRepoModule(new TestRepoModule() {
                     @Override
                     public UsersRepo usersRepo() {
                         UsersRepo repo = super.usersRepo();
-                        Mockito.when(repo.getUser("googlesamples")).thenReturn(Single.just(user));
+                        Mockito.when(repo.getUser("z0lk1n")).thenReturn(Single.just(user));
                         Mockito.when(repo.getUserRepos(user)).thenReturn(Single.just(new ArrayList<>()));
                         return repo;
                     }
@@ -71,7 +72,7 @@ public class GitHubParserPresenterUnitTest {
         Mockito.verify(presenter).loadData();
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS);
 
-        Mockito.verify(view).showProgressBar(false);
+        Mockito.verify(view).hideLoading();
         Mockito.verify(view).loadImage(user.getAvatarUrl());
         Mockito.verify(view).setUsernameText(user.getLogin());
         Mockito.verify(view).updateRepoList();
@@ -79,6 +80,24 @@ public class GitHubParserPresenterUnitTest {
 
     @Test
     public void loadDataTestFailure() {
+        Throwable throwableUser = new RuntimeException("No such user in cache");
 
+        TestComponent component = DaggerTestComponent.builder()
+                .testRepoModule(new TestRepoModule() {
+                    @Override
+                    public UsersRepo usersRepo() {
+                        UsersRepo repo = super.usersRepo();
+                        Mockito.when(repo.getUser("z0lk1n")).thenReturn(Single.error(throwableUser));
+                        return repo;
+                    }
+                }).build();
+
+        component.inject(presenter);
+        presenter.attachView(view);
+        Mockito.verify(presenter).loadData();
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS);
+
+        Mockito.verify(view).hideLoading();
+        Mockito.verify(view).showNotifyingMessage(throwableUser.getMessage());
     }
 }

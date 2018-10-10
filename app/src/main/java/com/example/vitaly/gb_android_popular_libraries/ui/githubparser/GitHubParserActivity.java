@@ -108,11 +108,12 @@ public final class GitHubParserActivity extends MvpAppCompatActivity implements 
     }
 
     @Override
-    public void showProgressBar(boolean visible)    {
-        if(visible) {
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            progressBar.setVisibility(View.GONE);
-        }
+    public void showLoading() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+        progressBar.setVisibility(View.GONE);
     }
 }

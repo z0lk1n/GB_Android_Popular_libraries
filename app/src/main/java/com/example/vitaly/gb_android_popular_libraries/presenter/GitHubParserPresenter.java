@@ -67,11 +67,11 @@ public final class GitHubParserPresenter extends MvpPresenter<GitHubParserView> 
 
     @SuppressLint("CheckResult")
     public void loadData() {
-        getViewState().showProgressBar(true);
+        getViewState().showLoading();
         usersRepo.getUser(username)
                 .observeOn(mainThreadScheduler)
                 .subscribe(user -> {
-                    getViewState().showProgressBar(false);
+                    getViewState().hideLoading();
                     getViewState().loadImage(user.getAvatarUrl());
                     getViewState().setUsernameText(user.getLogin());
                     usersRepo.getUserRepos(user)
@@ -84,7 +84,7 @@ public final class GitHubParserPresenter extends MvpPresenter<GitHubParserView> 
                                 getViewState().showNotifyingMessage(throwable.getMessage());
                             });
                 }, throwable -> {
-                    getViewState().showProgressBar(false);
+                    getViewState().hideLoading();
                     Timber.e(throwable, MSG_ERROR_USER);
                     getViewState().showNotifyingMessage(throwable.getMessage());
                 });
