@@ -1,6 +1,5 @@
 package com.example.vitaly.gb_android_popular_libraries;
 
-import com.example.vitaly.gb_android_popular_libraries.di.DaggerTestComponent;
 import com.example.vitaly.gb_android_popular_libraries.di.TestComponent;
 import com.example.vitaly.gb_android_popular_libraries.di.modules.ApiModule;
 import com.example.vitaly.gb_android_popular_libraries.model.entity.Repository;

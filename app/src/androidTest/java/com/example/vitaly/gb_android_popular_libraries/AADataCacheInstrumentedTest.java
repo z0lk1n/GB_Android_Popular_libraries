@@ -21,9 +21,9 @@ import io.reactivex.observers.TestObserver;
 
 import static org.junit.Assert.assertEquals;
 
-public class RealmDataCacheInstrumentedTest {
+public class AADataCacheInstrumentedTest {
 
-    @Inject @Named("realmCache") DataCache cache;
+    @Inject @Named("aaCache") DataCache cache;
 
     @BeforeClass
     public static void setupClass() {
