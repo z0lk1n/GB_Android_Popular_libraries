@@ -74,7 +74,7 @@ public class RealmDataCache implements DataCache {
             Realm realm = Realm.getDefaultInstance();
             RealmUser realmUser = realm.where(RealmUser.class).equalTo("login", user.getLogin()).findFirst();
             if (realmUser == null) {
-                emitter.onError(new RuntimeException("No such user in cache"));
+                emitter.onError(new RuntimeException("No repos for such user in cache"));
             } else {
                 List<Repository> repositories = new ArrayList<>();
                 for (RealmRepository realmRepository : realmUser.getRepos()) {

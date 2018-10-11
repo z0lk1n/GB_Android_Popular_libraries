@@ -81,7 +81,7 @@ public class AADataCache implements DataCache {
                     .where("login = ?", user.getLogin())
                     .executeSingle();
             if (aaUser == null) {
-                emitter.onError(new RuntimeException("No such user in cache"));
+                emitter.onError(new RuntimeException("No repos for such user in cache"));
             } else {
                 List<Repository> repos = new ArrayList<>();
                 for (AARepository aaRepository : aaUser.repositories()) {
