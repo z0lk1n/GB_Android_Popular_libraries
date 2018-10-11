@@ -2,7 +2,9 @@ package com.example.vitaly.gb_android_popular_libraries;
 
 import android.graphics.Bitmap;
 
+import com.example.vitaly.gb_android_popular_libraries.di.DaggerTestComponent;
 import com.example.vitaly.gb_android_popular_libraries.di.TestComponent;
+import com.example.vitaly.gb_android_popular_libraries.di.modules.AppModule;
 import com.example.vitaly.gb_android_popular_libraries.model.cache.image.ImageCache;
 
 import org.junit.After;
@@ -35,7 +37,10 @@ public class RealmImageCacheInstrumentedTest {
 
     @Before
     public void setup() {
-        TestComponent component = DaggerTestComponent.builder().build();
+        TestComponent component = DaggerTestComponent
+                .builder()
+                .appModule(new AppModule(App.getInstance()))
+                .build();
         component.inject(this);
     }
 
