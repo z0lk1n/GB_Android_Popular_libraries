@@ -2,6 +2,7 @@ package com.example.vitaly.gb_android_popular_libraries;
 
 import com.example.vitaly.gb_android_popular_libraries.di.DaggerTestComponent;
 import com.example.vitaly.gb_android_popular_libraries.di.TestComponent;
+import com.example.vitaly.gb_android_popular_libraries.di.modules.AppModule;
 import com.example.vitaly.gb_android_popular_libraries.model.cache.data.DataCache;
 import com.example.vitaly.gb_android_popular_libraries.model.entity.Repository;
 import com.example.vitaly.gb_android_popular_libraries.model.entity.User;
@@ -39,7 +40,10 @@ public class RealmDataCacheInstrumentedTest {
 
     @Before
     public void setup() {
-        TestComponent component = DaggerTestComponent.builder().build();
+        TestComponent component = DaggerTestComponent
+                .builder()
+                .appModule(new AppModule(App.getInstance()))
+                .build();
         component.inject(this);
     }
 

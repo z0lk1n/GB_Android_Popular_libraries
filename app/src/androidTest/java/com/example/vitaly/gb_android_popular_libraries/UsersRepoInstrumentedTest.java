@@ -3,6 +3,7 @@ package com.example.vitaly.gb_android_popular_libraries;
 import com.example.vitaly.gb_android_popular_libraries.di.DaggerTestComponent;
 import com.example.vitaly.gb_android_popular_libraries.di.TestComponent;
 import com.example.vitaly.gb_android_popular_libraries.di.modules.ApiModule;
+import com.example.vitaly.gb_android_popular_libraries.di.modules.AppModule;
 import com.example.vitaly.gb_android_popular_libraries.model.entity.Repository;
 import com.example.vitaly.gb_android_popular_libraries.model.entity.User;
 import com.example.vitaly.gb_android_popular_libraries.model.repo.UsersRepo;
@@ -45,6 +46,7 @@ public class UsersRepoInstrumentedTest {
     public void setup() {
         TestComponent component = DaggerTestComponent
                 .builder()
+                .appModule(new AppModule(App.getInstance()))
                 .apiModule(new ApiModule() {
                                @Override
                                public String getBaseUrl() {
